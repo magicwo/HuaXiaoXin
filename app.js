@@ -1,15 +1,107 @@
 //app.js
 App({
-  onLaunch: function () {
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
+  globalData: {
+    appid: "wx356c38b936e71084",
+    secret:"35935a5c5a144d3d587563916895e1e6",
+    userInfo: null,
+    userId: null,
+    isLogin: false,
+    token: null,
+    userPic:null,
+    nickName:null,
+    userInfo:null
+  },
+  onLaunch: function() {
+    var that=this;
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (res.code) {
+          console.log(res.code);
+          wx.request({
+            url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + that.globalData.appid + '&secret=' + that.globalData.secret + '&js_code=' + res.code + '&grant_type=authorization_code',
+            success: function(result) {
+              console.log(result)
+              var data = result.data;
+              if (result.data.openid!=null){
+                that.globalData.userId = result.data.openid;
+                wx.getUserInfo({
+                  success:function(res){
+                    that.globalData.nickName = res.userInfo.nickName;
+                    that.globalData.userPic = res.userInfo.avatarUrl;
+                    that.globalData.userInfo = res.userInfo;
+
+                    console.log(res.userInfo);
+                    wx.request({
+                      url: 'https://www.huaxinapp.xyz/api/user/userLogin.do?userId=' + that.globalData.userId,
+                      method: 'POST',
+                      success: function (result) {
+                        var data = result.data;
+                        console.log(result);
+                        if(data.success){
+                          console.log(result);
+                          that.globalData.token=data.value.token;
+                          console.log(that.globalData.token);
+
+                        }
+                        else if (data.error == 'user not exist') {
+                          //用户未注册 所以要调用新增用户接口
+                          console.log(data.error);
+                          wx.request({
+                            url: 'https://www.huaxinapp.xyz/api/user/createUser.do',
+                            method: 'POST',
+                            header: {
+                              'content-type': 'application/json',
+
+                            },
+                            data: {
+                              userId: that.globalData.userId,
+                              nickname: that.globalData.nickName,
+                              userPic: that.globalData.userPic
+                            },
+
+                          })
+
+
+
+                        }
+
+
+                      }
+
+                    })
+
+
+
+
+
+
+
+
+
+
+
+                  }
+                })
+               
+
+                
+
+
+
+
+
+              }
+
+              
+
+            }
+          })
+
+
+
+        }
       }
     })
     // 获取用户信息
@@ -33,7 +125,5 @@ App({
       }
     })
   },
-  globalData: {
-    userInfo: null
-  }
+ 
 })

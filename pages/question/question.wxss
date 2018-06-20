@@ -1,0 +1,11 @@
+.item {
+    margin-top: .6rem;
+    padding: .6rem;
+    background: #fff;
+    font-size: .8rem;
+}
+.title_top{
+    display: flex;
+    flex-direction: row;
+    padding: .3rem
+}

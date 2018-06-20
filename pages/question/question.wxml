@@ -1,4 +1,30 @@
-<view class="tag_view">情绪压力</view>
-<view class="content_view">怒海打sdasd打大苏打啊是的暗帝</view>
+<!-- <block wx:for="{{ques}}"> -->
 
-<view class="content_view">怒海打sdasd打大苏打啊是的暗帝</view>
+
+
+<view class="item">
+  <view class="title_top">
+    <view class="tag_icon">
+      <image class='user_icon' src='https://www.huaxinapp.xyz/static/wxss/icon_label.png' style="width:1rem;height:1rem;margin-right=10rpx">
+      </image>
+    </view>
+    <view class='qu_type' >情绪管理
+    </view>
+
+
+
+  </view>
+
+  <view class="tag_view">情绪压力</view>
+  <view class="content_view">怒海打sdasd打大苏打啊是的暗帝</view>
+
+  <view class="content_view">怒海打sdasd打大苏打啊是的暗帝</view>
+
+
+
+</view>
+
+
+
+
+<!-- </block> -->
